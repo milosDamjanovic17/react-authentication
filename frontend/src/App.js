@@ -15,15 +15,15 @@ import { action as manipulateEventAction } from './components/EventForm';
 import NewsletterPage, { action as newsletterAction } from './pages/Newsletter';
 import AuthenticationPage, {action as authAction} from './pages/Authentication';
 import {action as logoutAction} from './pages/Logout';
-import {loader as tokenLoader} from './util/auth'
+import {loader as tokenLoader, checkAuthLoader} from './util/auth';
 
 const router = createBrowserRouter([
   {
     path: '/',
     element: <RootLayout />,
     errorElement: <ErrorPage />,
-    id: 'root',
-    loader: tokenLoader,
+    id: 'root', // assigning id: 'root' as a pointer for components that will use to check if the token is present
+    loader: tokenLoader, // making a token available and visible to all child components
     children: [
       { index: true, element: <HomePage /> },
       {
@@ -49,6 +49,7 @@ const router = createBrowserRouter([
                 path: 'edit',
                 element: <EditEventPage />,
                 action: manipulateEventAction,
+                loader: checkAuthLoader,
               },
             ],
           },
@@ -56,6 +57,7 @@ const router = createBrowserRouter([
             path: 'new',
             element: <NewEventPage />,
             action: manipulateEventAction,
+            loader: checkAuthLoader,
           },
         ],
       },
